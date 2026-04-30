@@ -151,41 +151,82 @@ st.write("Busca salidas disponibles en campos de golf cercanos.")
 
 st.markdown("""
 <style>
-.result-card {
-    border: 1px solid #ddd;
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 16px;
-    background-color: #ffffff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    min-height: 260px;
-}
-.result-title {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 8px;
-}
-.result-recorrido {
-    font-size: 15px;
-    margin-bottom: 8px;
-}
-.result-meta {
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-.tarifa {
-    font-size: 14px;
+.main-title {
+    font-size: 34px;
+    font-weight: 800;
     margin-bottom: 4px;
 }
-.reserva {
-    display: inline-block;
-    margin-top: 12px;
-    padding: 8px 14px;
-    border-radius: 8px;
-    background-color: #1f7a4d;
-    color: white !important;
-    text-decoration: none;
-    font-weight: 600;
+
+.subtitle {
+    font-size: 17px;
+    color: #666;
+    margin-bottom: 24px;
+}
+
+.search-panel {
+    border: 1px solid #e5e5e5;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 24px;
+    background-color: #fafafa;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.result-summary {
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin: 16px 0 22px 0;
+    background-color: #eaf7ef;
+    color: #145c32;
+    font-weight: 700;
+}
+
+.result-card {
+    border: 1px solid #e1e1e1;
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 18px;
+    background-color: #ffffff;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+    min-height: 285px;
+}
+
+.result-title {
+    font-size: 19px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #222;
+}
+
+.result-meta {
+    font-size: 17px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.result-recorrido {
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #555;
+    min-height: 38px;
+}
+
+.tarifas-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.tarifa {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+hr.card-separator {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 12px 0;
 }
 </style>
 """, unsafe_allow_html=True)
