@@ -65,8 +65,11 @@ def consultar_recorrido(session, campo, recorrido, token, id_inicio, api, cultur
     }
 
     try:
-        r = session.post(api + "/Api/Disponibilidad/ObtenerDisponibilidadDia",
-                         json=payload, headers=headers)
+        r = session.post(
+            api + "/Api/Disponibilidad/ObtenerDisponibilidadDia",
+            json=payload,
+            headers=headers
+        )
         data = r.json()
     except:
         return []
@@ -89,17 +92,17 @@ def consultar_recorrido(session, campo, recorrido, token, id_inicio, api, cultur
             for t in h.get("tarifas", [])
         ]
 
-if tarifas:
-    resultados.append({
-        "campo": campo["nombre"],
-        "recorrido": formatear_nombre_recorrido(recorrido),
-        "hora": hora,
-        "jugadores_disponibles": jugadores_disp,
-        "tarifas": tarifas,
-        "url_reserva": campo.get("url_reserva", "No disponible"),
-        "email_reservas": campo.get("email_reservas", "No disponible"),
-        "telefono_reserva": campo.get("telefono_reserva", "No disponible")
-    })
+        if tarifas:
+            resultados.append({
+                "campo": campo["nombre"],
+                "recorrido": formatear_nombre_recorrido(recorrido),
+                "hora": hora,
+                "jugadores_disponibles": jugadores_disp,
+                "tarifas": tarifas,
+                "url_reserva": campo.get("url_reserva", "No disponible"),
+                "email_reservas": campo.get("email_reservas", "No disponible"),
+                "telefono_reserva": campo.get("telefono_reserva", "No disponible")
+            })
 
     return resultados
 
