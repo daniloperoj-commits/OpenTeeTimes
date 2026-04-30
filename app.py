@@ -246,31 +246,31 @@ if st.button("Buscar"):
     )
 
     if not resultados:
-        st.warning("No se encontraron salidas disponibles con esos criterios.")
-       else:
-        st.success(f"Se encontraron {len(resultados)} salidas disponibles.")
+    st.warning("No se encontraron salidas disponibles con esos criterios.")
+else:
+    st.success(f"Se encontraron {len(resultados)} salidas disponibles.")
 
-        for i in range(0, len(resultados), 4):
-            columnas = st.columns(4)
+    for i in range(0, len(resultados), 4):
+        columnas = st.columns(4)
 
-            for col, r in zip(columnas, resultados[i:i+4]):
-                tarifas_html = ""
+        for col, r in zip(columnas, resultados[i:i+4]):
+            tarifas_html = ""
 
-                for t in r["tarifas"]:
-                    tarifas_html += f"<div class='tarifa'>• {t['nombre']}: <b>{t['precio']} €</b></div>"
+            for t in r["tarifas"]:
+                tarifas_html += f"<div class='tarifa'>• {t['nombre']}: <b>{t['precio']} €</b></div>"
 
-                with col:
-                    st.markdown(f"""
-                    <div class="result-card">
-                        <div class="result-title">{r['campo']}</div>
-                        <div class="result-meta">🕒 <b>{r['hora']}</b> · 🏌️ x {r['jugadores_disponibles']}</div>
-                        <div class="result-recorrido">{r['recorrido']}</div>
-                        <div><b>Tarifas:</b></div>
-                        {tarifas_html}
-                    </div>
-                    """, unsafe_allow_html=True)
+            with col:
+                st.markdown(f"""
+                <div class="result-card">
+                    <div class="result-title">{r['campo']}</div>
+                    <div class="result-meta">🕒 <b>{r['hora']}</b> · 🏌️ x {r['jugadores_disponibles']}</div>
+                    <div class="result-recorrido">{r['recorrido']}</div>
+                    <div><b>Tarifas:</b></div>
+                    {tarifas_html}
+                </div>
+                """, unsafe_allow_html=True)
 
-                    with st.expander("Info Reservas"):
-                        st.write(f"**Web reservas:** {r['url_reserva']}")
-                        st.write(f"**Email:** {r.get('email_reservas', 'No disponible')}")
-                        st.write(f"**Teléfono:** {r.get('telefono_reserva', 'No disponible')}")
+                with st.expander("Info Reservas"):
+                    st.write(f"**Web reservas:** {r['url_reserva']}")
+                    st.write(f"**Email:** {r.get('email_reservas', 'No disponible')}")
+                    st.write(f"**Teléfono:** {r.get('telefono_reserva', 'No disponible')}")
