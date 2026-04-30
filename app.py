@@ -2,7 +2,7 @@ import streamlit as st
 import json
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, date
 
 st.set_page_config(page_title="Buscador Tee Times", layout="wide")
 
@@ -149,23 +149,28 @@ st.markdown("""
 .result-card {
     border: 1px solid #ddd;
     border-radius: 14px;
-    padding: 18px;
+    padding: 16px;
     margin-bottom: 16px;
     background-color: #ffffff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    min-height: 260px;
 }
 .result-title {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
+}
+.result-recorrido {
+    font-size: 15px;
+    margin-bottom: 8px;
 }
 .result-meta {
-    font-size: 18px;
+    font-size: 16px;
     margin-bottom: 10px;
 }
 .tarifa {
-    margin-left: 12px;
-    font-size: 16px;
+    font-size: 14px;
+    margin-bottom: 4px;
 }
 .reserva {
     display: inline-block;
@@ -183,13 +188,26 @@ st.markdown("""
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    fecha_txt = st.text_input("Fecha", value="29/04/2026", help="Formato DD/MM/AAAA")
+    fecha = st.date_input(
+        "Fecha",
+        value=date.today(),
+        min_value=date.today(),
+        format="DD/MM/YYYY"
+    )
 
 with col2:
-    hora_inicio_txt = st.text_input("Hora inicio", value="14:40", help="Formato HH:MM")
+    hora_inicio_txt = st.text_input(
+        "Hora inicio",
+        value="09:00",
+        help="Formato HH:MM"
+    )
 
 with col3:
-    hora_fin_txt = st.text_input("Hora fin", value="15:00", help="Formato HH:MM")
+    hora_fin_txt = st.text_input(
+        "Hora fin",
+        value="13:00",
+        help="Formato HH:MM"
+    )
 
 col4, col5, col6 = st.columns(3)
 
@@ -205,11 +223,15 @@ with col6:
 if st.button("Buscar"):
 
     try:
-        fecha_api = datetime.strptime(fecha_txt, "%d/%m/%Y").strftime("%Y/%m/%d")
+        fecha_api = fecha.strftime("%Y/%m/%d")
         hora_inicio_api = datetime.strptime(hora_inicio_txt, "%H:%M").strftime("%H:%M")
         hora_fin_api = datetime.strptime(hora_fin_txt, "%H:%M").strftime("%H:%M")
     except ValueError:
-        st.error("Revisa el formato: fecha DD/MM/AAAA y horas HH:MM.")
+        st.error("Revisa el formato de las horas. Deben estar en formato HH:MM.")
+        st.stop()
+
+    if hora_fin_api <= hora_inicio_api:
+        st.error("La hora fin debe ser posterior a la hora inicio.")
         st.stop()
 
     resultados = buscar_teetimes(
@@ -226,20 +248,23 @@ if st.button("Buscar"):
     else:
         st.success(f"Se encontraron {len(resultados)} salidas disponibles.")
 
-        for r in resultados:
-            tarifas_html = ""
+        for i in range(0, len(resultados), 4):
+            columnas = st.columns(4)
 
-            for t in r["tarifas"]:
-                tarifas_html += f"<div class='tarifa'>• {t['nombre']}: <b>{t['precio']} €</b></div>"
+            for col, r in zip(columnas, resultados[i:i+4]):
+                tarifas_html = ""
 
-            st.markdown(f"""
-            <div class="result-card">
-                <div class="result-title">{r['campo']}</div>
-                <div class="result-meta">
-                    ⏱️ <b>{r['hora']}</b> · {r['recorrido']} · 🏌️ x {r['jugadores_disponibles']}
-                </div>
-                <div><b>Tarifas:</b></div>
-                {tarifas_html}
-                <a class="reserva" href="{r['url_reserva']}" target="_blank">Reservar</a>
-            </div>
-            """, unsafe_allow_html=True)
+                for t in r["tarifas"]:
+                    tarifas_html += f"<div class='tarifa'>• {t['nombre']}: <b>{t['precio']} €</b></div>"
+
+                with col:
+                    st.markdown(f"""
+                    <div class="result-card">
+                        <div class="result-title">{r['campo']} · {r['hora']}</div>
+                        <div class="result-recorrido">{r['recorrido']}</div>
+                        <div class="result-meta">🏌️ x {r['jugadores_disponibles']}</div>
+                        <div><b>Tarifas:</b></div>
+                        {tarifas_html}
+                        <a class="reserva" href="{r['url_reserva']}" target="_blank">Web Reservas</a>
+                    </div>
+                    """, unsafe_allow_html=True)
