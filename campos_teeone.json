@@ -9,13 +9,13 @@
     "email_reservas": "reservas@encingolf.com",
     "url_reserva": "https://open.teeone.golf/es/encin/disponibilidad",
     "Recorridos": [
-    {"nombre": "TEE 1",
+    {"nombre": "TEE 1 - 18 HOYOS",
     "id_recorrido": 511,
     "18hoyos": true,
     "9Hoyos": false ,
     "CampoCorto": false 
   },
-   {"nombre": "TEE10 - 9HOYOS",
+   {"nombre": "TEE 10 - 9 HOYOS",
     "id_recorrido": 514,
     "18hoyos": false ,
     "9Hoyos": true,
@@ -32,7 +32,7 @@
     "email_reservas": "golf@robledalgolf.com",
     "url_reserva": "https://open.teeone.golf/es/robledal/disponibilidad",
     "Recorridos": [
-    {"nombre": "TEE 1",
+    {"nombre": "TEE 1 - 18 HOYOS",
     "id_recorrido": 228,
     "18hoyos": true,
     "9Hoyos": false,
@@ -69,7 +69,7 @@
     "email_reservas": "info@retamaresgolf.com",
     "url_reserva": "https://open.teeone.golf/es/retamares/disponibilidad",
     "Recorridos": [
-    {"nombre": "TEE 1",
+    {"nombre": "TEE 1 - 18 HOYOS",
     "id_recorrido": 167,
     "18hoyos": true,
     "9Hoyos": false,
