@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime, date
 
 st.set_page_config(page_title="Buscador Tee Times", layout="wide")
+st.image("header.jpg", use_container_width=True)
 
 # =========================
 # FUNCIONES
@@ -325,3 +326,13 @@ if st.button("Buscar"):
                         st.write(f"**Web reservas:** {r.get('url_reserva', 'No disponible')}")
                         st.write(f"**Email:** {r.get('email_reservas', 'No disponible')}")
                         st.write(f"**Teléfono:** {r.get('telefono_reserva', 'No disponible')}")
+
+st.markdown(
+    "<p style='text-align:center; font-size:12px; color:gray;'>Versión BETA</p>",
+    unsafe_allow_html=True
+)
+
+col1, col2, col3 = st.columns([1,2,1])
+
+with col2:
+    st.image("powered.png", width=250)
