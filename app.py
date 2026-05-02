@@ -147,7 +147,6 @@ def buscar_teetimes(fecha, hora_inicio, hora_fin, jugadores, filtro_hoyos, filtr
 # INTERFAZ
 # =========================
 
-st.markdown("<div class='main-title'>🏌️ Open Tee Times</div>", unsafe_allow_html=True)
 st.markdown("<div class='subtitle'>Busca salidas disponibles en campos de golf cercanos.</div>", unsafe_allow_html=True)
 
 st.markdown("""
@@ -327,12 +326,16 @@ if st.button("Buscar"):
                         st.write(f"**Email:** {r.get('email_reservas', 'No disponible')}")
                         st.write(f"**Teléfono:** {r.get('telefono_reserva', 'No disponible')}")
 
+st.markdown("------")
+
 st.markdown(
     "<p style='text-align:center; font-size:12px; color:gray;'>Versión BETA</p>",
     unsafe_allow_html=True
 )
 
-col1, col2, col3 = st.columns([1,2,1])
-
-with col2:
-    st.image("powered.png", width=250)
+st.markdown(
+    "<div style='text-align:center;'>"
+    "<img src='powered.png' width='400'>"
+    "</div>",
+    unsafe_allow_html=True
+)
