@@ -5,10 +5,11 @@ import base64
 from bs4 import BeautifulSoup
 from datetime import datetime, date
 
-st.set_page_config
-    (page_title="TeeRadar", 
+st.set_page_config(
+    page_title="TeeRadar",
     page_icon="favicon.png",
-    layout="wide")
+    layout="wide"
+)
 
 st.image("header.jpg", use_container_width=True)
 
