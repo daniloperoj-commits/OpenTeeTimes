@@ -232,10 +232,43 @@ hr.card-separator {
 </style>
 """, unsafe_allow_html=True)
 
+from datetime import date, datetime, time, timedelta
+
+SLOT_MINUTES = 15  # cambia a 5 si quieres que 12:16 pase a 12:20
+
+
+def redondear_hora_actual():
+    ahora = datetime.now()
+    minutos = ahora.minute
+
+    minutos_redondeados = ((minutos + SLOT_MINUTES - 1) // SLOT_MINUTES) * SLOT_MINUTES
+    hora_redondeada = ahora.replace(minute=0, second=0, microsecond=0) + timedelta(minutes=minutos_redondeados)
+
+    hora_min = ahora.replace(hour=7, minute=0, second=0, microsecond=0)
+    hora_max = ahora.replace(hour=20, minute=0, second=0, microsecond=0)
+
+    if hora_redondeada < hora_min:
+        hora_redondeada = hora_min
+
+    if hora_redondeada > hora_max:
+        hora_redondeada = hora_max
+
+    return hora_redondeada.time()
+
+
+hora_inicio_default = redondear_hora_actual()
+hora_fin_default_dt = datetime.combine(date.today(), hora_inicio_default) + timedelta(hours=1)
+
+if hora_fin_default_dt.time() > time(20, 0):
+    hora_fin_default = time(20, 0)
+else:
+    hora_fin_default = hora_fin_default_dt.time()
+
+
 with st.container(border=True):
     st.markdown("### 🔎 Criterios de búsqueda")
 
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns([1, 2])
 
     with col1:
         fecha = st.date_input(
@@ -246,29 +279,63 @@ with st.container(border=True):
         )
 
     with col2:
-        hora_inicio_txt = st.text_input(
-            "Hora inicio",
-            value="09:00",
-            help="Formato HH:MM"
+        hora_inicio, hora_fin = st.slider(
+            "Franja horaria",
+            min_value=time(7, 0),
+            max_value=time(20, 0),
+            value=(hora_inicio_default, hora_fin_default),
+            step=timedelta(minutes=SLOT_MINUTES),
+            format="HH:mm"
         )
+
+    col3, col4, col5 = st.columns(3)
 
     with col3:
-        hora_fin_txt = st.text_input(
-            "Hora fin",
-            value="13:00",
-            help="Formato HH:MM"
+        jugadores_opcion = st.segmented_control(
+            "Jugadores",
+            options=[1, 2, 3, 4],
+            format_func=lambda x: f"🏌️ x {x}",
+            default=4,
+            selection_mode="single"
         )
-
-    col4, col5, col6 = st.columns(3)
+        jugadores = jugadores_opcion
 
     with col4:
-        jugadores = st.number_input("Jugadores", min_value=1, max_value=4, value=4)
+        hoyos_seleccionados = st.segmented_control(
+            "Hoyos",
+            options=["18", "9"],
+            default=["18", "9"],
+            selection_mode="multi"
+        )
+
+        if set(hoyos_seleccionados) == {"18", "9"}:
+            filtro_hoyos = "todos"
+        elif hoyos_seleccionados == ["18"]:
+            filtro_hoyos = "18"
+        elif hoyos_seleccionados == ["9"]:
+            filtro_hoyos = "9"
+        else:
+            filtro_hoyos = "todos"
 
     with col5:
-        filtro_hoyos = st.selectbox("Hoyos", ["todos", "18", "9"])
+        tipo_seleccionado = st.segmented_control(
+            "Tipo campo",
+            options=["largo", "corto"],
+            default=["largo", "corto"],
+            selection_mode="multi"
+        )
 
-    with col6:
-        filtro_tipo = st.selectbox("Tipo campo", ["todos", "largo", "corto"])
+        if set(tipo_seleccionado) == {"largo", "corto"}:
+            filtro_tipo = "todos"
+        elif tipo_seleccionado == ["largo"]:
+            filtro_tipo = "largo"
+        elif tipo_seleccionado == ["corto"]:
+            filtro_tipo = "corto"
+        else:
+            filtro_tipo = "todos"
+
+    hora_inicio_txt = hora_inicio.strftime("%H:%M")
+    hora_fin_txt = hora_fin.strftime("%H:%M")
 
 if st.button("Buscar"):
 
