@@ -238,36 +238,31 @@ from zoneinfo import ZoneInfo
 SLOT_MINUTES = 10
 TZ = ZoneInfo("Europe/Madrid")
 
-
 st.markdown("""
 <style>
+/* Botones seleccionados */
 div.stButton > button[kind="primary"] {
-    background-color: #243447;
-    border-color: #243447;
-    color: white;
+    background-color: #d0d4da !important;
+    border-color: #9aa3ad !important;
+    color: #1f2933 !important;
 }
 
+/* Botones no seleccionados */
 div.stButton > button[kind="secondary"] {
-    background-color: #f0f2f6;
-    border-color: #c9ced6;
-    color: #243447;
-}
-</style>
-""", unsafe_allow_html=True)
-st.markdown("""
-<style>
-/* Slider */
-.stSlider [data-baseweb="slider"] div[role="slider"] {
-    background-color: #243447 !important;
-    border-color: #243447 !important;
+    background-color: #f7f8fa !important;
+    border-color: #cfd4da !important;
+    color: #1f2933 !important;
 }
 
-.stSlider [data-baseweb="slider"] > div > div {
-    background-color: #243447 !important;
+/* Slider: barra seleccionada */
+.stSlider [data-baseweb="slider"] div {
+    background-color: #9aa3ad !important;
 }
 
-.stSlider [data-baseweb="slider"] span {
-    color: #243447 !important;
+/* Slider: círculos */
+.stSlider [role="slider"] {
+    background-color: #9aa3ad !important;
+    border-color: #9aa3ad !important;
 }
 </style>
 """, unsafe_allow_html=True)
