@@ -353,8 +353,8 @@ with st.container(border=True):
                     st.session_state.jugadores = num
     
     with col4:
-    st.markdown("**Hoyos**")
-    btn18, btn9, espacio = st.columns([1, 1, 2.5])
+        st.markdown("**Hoyos**")
+        btn18, btn9, espacio = st.columns([1, 1, 2.5])
 
         with btn18:
             if st.button(
@@ -373,8 +373,8 @@ with st.container(border=True):
                 toggle_multi_obligatorio("hoyos_seleccionados", "9")
     
     with col5:
-    st.markdown("**Tipo campo**")
-    btn_largo, btn_corto, espacio = st.columns([1, 1, 2.5])
+        st.markdown("**Tipo campo**")
+        btn_largo, btn_corto, espacio = st.columns([1, 1, 2.5])
 
         with btn_largo:
             if st.button(
