@@ -254,7 +254,23 @@ div.stButton > button[kind="secondary"] {
 }
 </style>
 """, unsafe_allow_html=True)
+st.markdown("""
+<style>
+/* Slider */
+.stSlider [data-baseweb="slider"] div[role="slider"] {
+    background-color: #243447 !important;
+    border-color: #243447 !important;
+}
 
+.stSlider [data-baseweb="slider"] > div > div {
+    background-color: #243447 !important;
+}
+
+.stSlider [data-baseweb="slider"] span {
+    color: #243447 !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 def redondear_hora_actual():
     ahora = datetime.now(TZ)
@@ -325,11 +341,12 @@ with st.container(border=True):
             format="HH:mm"
         )
 
-    col3, col4, col5 = st.columns(3)
+   col3, col4, col5, col6 = st.columns([1.4, 0.8, 0.8, 1])
 
     with col3:
-        st.markdown("**Jugadores**")
-        cols_jugadores = st.columns(4)
+    st.markdown("**Jugadores**")
+    cols_jugadores = st.columns(4)
+    # botones jugadores...
 
         for i, num in enumerate([1, 2, 3, 4]):
             with cols_jugadores[i]:
@@ -340,8 +357,9 @@ with st.container(border=True):
         jugadores = st.session_state.jugadores
 
     with col4:
-        st.markdown("**Hoyos**")
-        cols_hoyos = st.columns(2)
+    st.markdown("**Hoyos**")
+    cols_hoyos = st.columns(2)
+    # botones hoyos...
 
         with cols_hoyos[0]:
             if st.button(
@@ -367,8 +385,12 @@ with st.container(border=True):
             filtro_hoyos = "9"
 
     with col5:
-        st.markdown("**Tipo campo**")
-        cols_tipo = st.columns(2)
+    st.markdown("**Tipo campo**")
+    cols_tipo = st.columns(2)
+    # botones tipo...
+
+    with col6:
+        st.empty()
 
         with cols_tipo[0]:
             if st.button(
