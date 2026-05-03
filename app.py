@@ -340,79 +340,56 @@ with st.container(border=True):
             format="HH:mm"
         )
 
-    col3, col4, col5, col6 = st.columns([1.4, 0.8, 0.8, 1])
+    col3, col4, col5 = st.columns([1.6, 1, 1])
 
     with col3:
-    st.markdown("**Jugadores**")
-    cols_jugadores = st.columns(4)
-    # botones jugadores...
-
+        st.markdown("**Jugadores**")
+        cols_jugadores = st.columns(4)
+    
         for i, num in enumerate([1, 2, 3, 4]):
             with cols_jugadores[i]:
                 tipo_boton = "primary" if st.session_state.jugadores == num else "secondary"
                 if st.button(f"🏌️ x {num}", type=tipo_boton, key=f"jug_{num}"):
                     st.session_state.jugadores = num
-
-        jugadores = st.session_state.jugadores
-
+    
     with col4:
-    st.markdown("**Hoyos**")
-    cols_hoyos = st.columns(2)
-    # botones hoyos...
-
+        st.markdown("**Hoyos**")
+        cols_hoyos = st.columns(2)
+    
         with cols_hoyos[0]:
-            if st.button(
-                "18 hoyos",
+            if st.button("18 hoyos",
                 type="primary" if "18" in st.session_state.hoyos_seleccionados else "secondary",
-                key="hoyos_18"
-            ):
+                key="hoyos_18"):
                 toggle_multi_obligatorio("hoyos_seleccionados", "18")
-
+    
         with cols_hoyos[1]:
-            if st.button(
-                "9 hoyos",
+            if st.button("9 hoyos",
                 type="primary" if "9" in st.session_state.hoyos_seleccionados else "secondary",
-                key="hoyos_9"
-            ):
+                key="hoyos_9"):
                 toggle_multi_obligatorio("hoyos_seleccionados", "9")
-
-        if set(st.session_state.hoyos_seleccionados) == {"18", "9"}:
-            filtro_hoyos = "todos"
-        elif st.session_state.hoyos_seleccionados == ["18"]:
-            filtro_hoyos = "18"
-        else:
-            filtro_hoyos = "9"
-
+    
     with col5:
-    st.markdown("**Tipo campo**")
-    cols_tipo = st.columns(2)
-    # botones tipo...
-
-    with col6:
-        st.empty()
-
+        st.markdown("**Tipo campo**")
+        cols_tipo = st.columns(2)
+    
         with cols_tipo[0]:
-            if st.button(
-                "Largo",
+            if st.button("Largo",
                 type="primary" if "largo" in st.session_state.tipo_seleccionado else "secondary",
-                key="tipo_largo"
-            ):
+                key="tipo_largo"):
                 toggle_multi_obligatorio("tipo_seleccionado", "largo")
-
+    
         with cols_tipo[1]:
-            if st.button(
-                "Corto",
+            if st.button("Corto",
                 type="primary" if "corto" in st.session_state.tipo_seleccionado else "secondary",
-                key="tipo_corto"
-            ):
+                key="tipo_corto"):
                 toggle_multi_obligatorio("tipo_seleccionado", "corto")
-
-        if set(st.session_state.tipo_seleccionado) == {"largo", "corto"}:
-            filtro_tipo = "todos"
-        elif st.session_state.tipo_seleccionado == ["largo"]:
-            filtro_tipo = "largo"
-        else:
-            filtro_tipo = "corto"
+    
+            if set(st.session_state.tipo_seleccionado) == {"largo", "corto"}:
+                filtro_tipo = "todos"
+            elif st.session_state.tipo_seleccionado == ["largo"]:
+                filtro_tipo = "largo"
+            else:
+                filtro_tipo = "corto"
 
     hora_inicio_txt = hora_inicio.strftime("%H:%M")
     hora_fin_txt = hora_fin.strftime("%H:%M")
