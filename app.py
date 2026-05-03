@@ -233,15 +233,34 @@ hr.card-separator {
 """, unsafe_allow_html=True)
 
 from datetime import date, datetime, time, timedelta
+from zoneinfo import ZoneInfo
 
-SLOT_MINUTES = 15  # cambia a 5 si quieres que 12:16 pase a 12:20
+SLOT_MINUTES = 10
+TZ = ZoneInfo("Europe/Madrid")
+
+
+st.markdown("""
+<style>
+div.stButton > button[kind="primary"] {
+    background-color: #243447;
+    border-color: #243447;
+    color: white;
+}
+
+div.stButton > button[kind="secondary"] {
+    background-color: #f0f2f6;
+    border-color: #c9ced6;
+    color: #243447;
+}
+</style>
+""", unsafe_allow_html=True)
 
 
 def redondear_hora_actual():
-    ahora = datetime.now()
-    minutos = ahora.minute
+    ahora = datetime.now(TZ)
 
-    minutos_redondeados = ((minutos + SLOT_MINUTES - 1) // SLOT_MINUTES) * SLOT_MINUTES
+    minutos_redondeados = ((ahora.minute + SLOT_MINUTES - 1) // SLOT_MINUTES) * SLOT_MINUTES
+
     hora_redondeada = ahora.replace(minute=0, second=0, microsecond=0) + timedelta(minutes=minutos_redondeados)
 
     hora_min = ahora.replace(hour=7, minute=0, second=0, microsecond=0)
@@ -256,13 +275,31 @@ def redondear_hora_actual():
     return hora_redondeada.time()
 
 
+def toggle_multi_obligatorio(clave, valor):
+    seleccion = st.session_state[clave]
+
+    if valor in seleccion:
+        if len(seleccion) > 1:
+            seleccion.remove(valor)
+    else:
+        seleccion.append(valor)
+
+    st.session_state[clave] = seleccion
+
+
+if "jugadores" not in st.session_state:
+    st.session_state.jugadores = 4
+
+if "hoyos_seleccionados" not in st.session_state:
+    st.session_state.hoyos_seleccionados = ["18", "9"]
+
+if "tipo_seleccionado" not in st.session_state:
+    st.session_state.tipo_seleccionado = ["largo", "corto"]
+
+
 hora_inicio_default = redondear_hora_actual()
 hora_fin_default_dt = datetime.combine(date.today(), hora_inicio_default) + timedelta(hours=1)
-
-if hora_fin_default_dt.time() > time(20, 0):
-    hora_fin_default = time(20, 0)
-else:
-    hora_fin_default = hora_fin_default_dt.time()
+hora_fin_default = min(hora_fin_default_dt.time(), time(20, 0))
 
 
 with st.container(border=True):
@@ -291,48 +328,70 @@ with st.container(border=True):
     col3, col4, col5 = st.columns(3)
 
     with col3:
-        jugadores_opcion = st.segmented_control(
-            "Jugadores",
-            options=[1, 2, 3, 4],
-            format_func=lambda x: f"🏌️ x {x}",
-            default=4,
-            selection_mode="single"
-        )
-        jugadores = jugadores_opcion
+        st.markdown("**Jugadores**")
+        cols_jugadores = st.columns(4)
+
+        for i, num in enumerate([1, 2, 3, 4]):
+            with cols_jugadores[i]:
+                tipo_boton = "primary" if st.session_state.jugadores == num else "secondary"
+                if st.button(f"🏌️ x {num}", type=tipo_boton, key=f"jug_{num}"):
+                    st.session_state.jugadores = num
+
+        jugadores = st.session_state.jugadores
 
     with col4:
-        hoyos_seleccionados = st.segmented_control(
-            "Hoyos",
-            options=["18", "9"],
-            default=["18", "9"],
-            selection_mode="multi"
-        )
+        st.markdown("**Hoyos**")
+        cols_hoyos = st.columns(2)
 
-        if set(hoyos_seleccionados) == {"18", "9"}:
+        with cols_hoyos[0]:
+            if st.button(
+                "18 hoyos",
+                type="primary" if "18" in st.session_state.hoyos_seleccionados else "secondary",
+                key="hoyos_18"
+            ):
+                toggle_multi_obligatorio("hoyos_seleccionados", "18")
+
+        with cols_hoyos[1]:
+            if st.button(
+                "9 hoyos",
+                type="primary" if "9" in st.session_state.hoyos_seleccionados else "secondary",
+                key="hoyos_9"
+            ):
+                toggle_multi_obligatorio("hoyos_seleccionados", "9")
+
+        if set(st.session_state.hoyos_seleccionados) == {"18", "9"}:
             filtro_hoyos = "todos"
-        elif hoyos_seleccionados == ["18"]:
+        elif st.session_state.hoyos_seleccionados == ["18"]:
             filtro_hoyos = "18"
-        elif hoyos_seleccionados == ["9"]:
-            filtro_hoyos = "9"
         else:
-            filtro_hoyos = "todos"
+            filtro_hoyos = "9"
 
     with col5:
-        tipo_seleccionado = st.segmented_control(
-            "Tipo campo",
-            options=["largo", "corto"],
-            default=["largo", "corto"],
-            selection_mode="multi"
-        )
+        st.markdown("**Tipo campo**")
+        cols_tipo = st.columns(2)
 
-        if set(tipo_seleccionado) == {"largo", "corto"}:
+        with cols_tipo[0]:
+            if st.button(
+                "Largo",
+                type="primary" if "largo" in st.session_state.tipo_seleccionado else "secondary",
+                key="tipo_largo"
+            ):
+                toggle_multi_obligatorio("tipo_seleccionado", "largo")
+
+        with cols_tipo[1]:
+            if st.button(
+                "Corto",
+                type="primary" if "corto" in st.session_state.tipo_seleccionado else "secondary",
+                key="tipo_corto"
+            ):
+                toggle_multi_obligatorio("tipo_seleccionado", "corto")
+
+        if set(st.session_state.tipo_seleccionado) == {"largo", "corto"}:
             filtro_tipo = "todos"
-        elif tipo_seleccionado == ["largo"]:
+        elif st.session_state.tipo_seleccionado == ["largo"]:
             filtro_tipo = "largo"
-        elif tipo_seleccionado == ["corto"]:
-            filtro_tipo = "corto"
         else:
-            filtro_tipo = "todos"
+            filtro_tipo = "corto"
 
     hora_inicio_txt = hora_inicio.strftime("%H:%M")
     hora_fin_txt = hora_fin.strftime("%H:%M")
