@@ -240,6 +240,7 @@ TZ = ZoneInfo("Europe/Madrid")
 
 st.markdown("""
 <style>
+
 /* Botones seleccionados */
 div.stButton > button[kind="primary"] {
     background-color: #d0d4da !important;
@@ -270,7 +271,26 @@ div.stButton > button[kind="secondary"] {
 .stSlider [data-testid="stThumbValue"] {
     color: #1f2933 !important;
     background-color: transparent !important;
+    font-size: 16px !important;
     font-weight: 600 !important;
+}
+
+/* Forzar botones en misma fila en móvil */
+div[data-testid="stHorizontalBlock"] {
+    flex-wrap: nowrap !important;
+}
+
+/* Reducir separación */
+div[data-testid="column"] {
+    padding-left: 0.15rem !important;
+    padding-right: 0.15rem !important;
+}
+
+/* Botones más compactos */
+div.stButton > button {
+    padding: 0.45rem 0.65rem !important;
+    min-width: auto !important;
+    white-space: nowrap !important;
 }
 </style>
 """, unsafe_allow_html=True)
