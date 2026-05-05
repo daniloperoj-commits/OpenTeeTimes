@@ -14,6 +14,13 @@ st.set_page_config(
 st.image("header.jpg", use_container_width=True)
 
 # =========================
+# MODO DEBUG
+# =========================
+
+params = st.query_params
+modo_debug = params.get("debug") == "1"
+
+# =========================
 # FUNCIONES
 # =========================
 
@@ -113,9 +120,15 @@ def consultar_recorrido(session, campo, recorrido, token, id_inicio, api, cultur
 
     return resultados
 
-def buscar_teetimes(fecha, hora_inicio, hora_fin, jugadores, filtro_hoyos, filtro_tipo):
+def buscar_teetimes(fecha, hora_inicio, hora_fin, jugadores, filtro_hoyos, filtro_tipo, campos_seleccionados=None):
     with open("campos_teeone.json", "r", encoding="utf-8") as f:
         campos = json.load(f)
+        
+    if campos_seleccionados:
+    campos = [
+        campo for campo in campos
+        if campo["nombre"] in campos_seleccionados
+    ]
 
     resultados = []
 
@@ -396,6 +409,22 @@ with st.container(border=True):
     hora_inicio_txt = hora_inicio.strftime("%H:%M")
     hora_fin_txt = hora_fin.strftime("%H:%M")
 
+    campos_seleccionados_debug = None
+
+    if modo_debug:
+        with open("campos_teeone.json", "r", encoding="utf-8") as f:
+            campos_debug = json.load(f)
+
+        nombres_campos_debug = sorted([campo["nombre"] for campo in campos_debug])
+
+        st.markdown("### 🧪 Debug")
+
+        campos_seleccionados_debug = st.multiselect(
+            "Campos a consultar",
+            options=nombres_campos_debug,
+            default=nombres_campos_debug
+        )
+
 if st.button("Buscar"):
 
     if jugadores is None or filtro_hoyos is None or filtro_tipo is None:
@@ -419,7 +448,8 @@ if st.button("Buscar"):
         hora_fin_api,
         jugadores,
         filtro_hoyos,
-        filtro_tipo
+        filtro_tipo,
+        campos_seleccionados_debug
     )
 
     if not resultados:
