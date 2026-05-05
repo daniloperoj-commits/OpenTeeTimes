@@ -262,13 +262,18 @@ def consultar_recorrido_teeone_v2(session, campo, recorrido, fecha, hora_inicio,
         if not hora or jugadores_disp < jugadores:
             continue
 
-        tarifas = [
-            {
-                "nombre": t.get("nombre"),
-                "precio": t.get("precio")
-            }
-            for t in h.get("tarifas", [])
-        ]
+        tarifas = []
+        
+        for t in h.get("tarifas", []):
+            precio = t.get("precio")
+        
+            if precio is None:
+                continue
+        
+            tarifas.append({
+                "nombre": t.get("nombre", "Tarifa"),
+                "precio": precio
+            })
 
         if tarifas:
             resultados.append(
