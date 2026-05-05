@@ -285,7 +285,7 @@
       {
         "nombre": "TEE 1 - 18 HOYOS",
         "id_recorrido": "01",
-        "id_hoyo": "1",
+        "id_hoyos": "1",
         "18hoyos": true,
         "9Hoyos": false,
         "CampoCorto": false
