@@ -11,6 +11,9 @@ st.set_page_config(
     layout="wide"
 )
 
+params = st.query_params
+modo_debug = params.get("debug") == "1"
+
 st.image("header.jpg", use_container_width=True)
 
 # =========================
@@ -121,7 +124,12 @@ def buscar_teetimes(fecha, hora_inicio, hora_fin, jugadores, filtro_hoyos, filtr
 
     for campo in campos:
         session = requests.Session()
-
+        
+        if not campo.get("activo", True):
+            continue
+        
+        if modo_debug and campo["nombre"] != campo_debug:
+            continue
         try:
             r = session.get(campo["url_reserva"])
             soup = BeautifulSoup(r.text, "html.parser")
@@ -322,6 +330,12 @@ fecha_default, hora_inicio_default, hora_fin_default = obtener_fecha_horas_defau
 with st.container(border=True):
     st.markdown("### 🔎 Criterios de búsqueda")
 
+campo_debug = None
+
+if modo_debug:
+    nombres_campos = [c["nombre"] for c in campos if c.get("activo", True)]
+    campo_debug = st.selectbox("Selecciona campo (DEBUG)", nombres_campos)
+    
     col1, col2 = st.columns([1, 2])
 
     with col1:
