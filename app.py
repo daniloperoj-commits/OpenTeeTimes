@@ -119,7 +119,15 @@ def consultar_recorrido(session, campo, recorrido, token, id_inicio, api, cultur
 def buscar_teetimes(fecha, hora_inicio, hora_fin, jugadores, filtro_hoyos, filtro_tipo):
     with open("campos_teeone.json", "r", encoding="utf-8") as f:
         campos = json.load(f)
-
+    params = st.query_params
+    modo_debug = params.get("debug") == "1"
+    
+    campo_debug = None
+    
+    if modo_debug:
+        nombres_campos = [c["nombre"] for c in campos if c.get("activo", True)]
+        campo_debug = st.selectbox("Selecciona campo (DEBUG)", nombres_campos)
+    
     resultados = []
 
     for campo in campos:
@@ -330,11 +338,11 @@ fecha_default, hora_inicio_default, hora_fin_default = obtener_fecha_horas_defau
 with st.container(border=True):
     st.markdown("### 🔎 Criterios de búsqueda")
 
-campo_debug = None
-
-if modo_debug:
-    nombres_campos = [c["nombre"] for c in campos if c.get("activo", True)]
-    campo_debug = st.selectbox("Selecciona campo (DEBUG)", nombres_campos)
+    campo_debug = None
+    
+    if modo_debug:
+        nombres_campos = [c["nombre"] for c in campos if c.get("activo", True)]
+        campo_debug = st.selectbox("Selecciona campo (DEBUG)", nombres_campos)
     
     col1, col2 = st.columns([1, 2])
 
