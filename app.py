@@ -268,7 +268,7 @@ def consultar_recorrido_teeone_v2(session, campo, recorrido, fecha, hora_inicio,
             precio = t.get("precio")
         
             if precio is None:
-                continue
+                continue  # ignora tarifas mal formadas
         
             tarifas.append({
                 "nombre": t.get("nombre", "Tarifa"),
