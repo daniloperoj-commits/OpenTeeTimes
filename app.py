@@ -145,6 +145,11 @@ def construir_resultado(campo, recorrido, hora, jugadores_disp, tarifas):
 def calcular_distancia_km(lat1, lon1, lat2, lon2):
     R = 6371
 
+    lat1 = float(lat1)
+    lon1 = float(lon1)
+    lat2 = float(lat2)
+    lon2 = float(lon2)
+
     dlat = math.radians(lat2 - lat1)
     dlon = math.radians(lon2 - lon1)
 
@@ -154,6 +159,8 @@ def calcular_distancia_km(lat1, lon1, lat2, lon2):
         * math.cos(math.radians(lat2))
         * math.sin(dlon / 2) ** 2
     )
+
+    a = min(1, max(0, a))
 
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
