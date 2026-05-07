@@ -101,6 +101,17 @@ def cargar_campos(solo_activos=True):
 
     return campos
 
+def cargar_localidades():
+    try:
+        with open("LocalidadesEspaña.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        st.error("No se encuentra el archivo LocalidadesEspaña.json.")
+        st.stop()
+    except json.JSONDecodeError as e:
+        st.error(f"El archivo LocalidadesEspaña.json no tiene formato JSON válido: {e}")
+        st.stop()
+
 def recorrido_cumple_filtros(recorrido, filtro_hoyos, filtro_tipo):
     if filtro_hoyos == "18" and not recorrido.get("18hoyos", False):
         return False
@@ -129,6 +140,23 @@ def construir_resultado(campo, recorrido, hora, jugadores_disp, tarifas):
         "email_reservas": campo.get("email_reservas", "No disponible"),
         "telefono_reserva": campo.get("telefono_reserva", "No disponible")
     }
+
+def calcular_distancia_km(lat1, lon1, lat2, lon2):
+    R = 6371
+
+    dlat = math.radians(lat2 - lat1)
+    dlon = math.radians(lon2 - lon1)
+
+    a = (
+        math.sin(dlat / 2) ** 2
+        + math.cos(math.radians(lat1))
+        * math.cos(math.radians(lat2))
+        * math.sin(dlon / 2) ** 2
+    )
+
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+    return R * c
 
 def consultar_recorrido_teeone_v1(session, campo, recorrido, token, id_inicio, api, culture,
                                   fecha, hora_inicio, hora_fin, jugadores):
@@ -361,7 +389,7 @@ def consultar_campo_teeone_v2(campo, fecha, hora_inicio, hora_fin, jugadores, fi
 
     return resultados
 
-def buscar_teetimes(fecha, hora_inicio, hora_fin, jugadores, filtro_hoyos, filtro_tipo, campos_seleccionados=None):
+def buscar_teetimes(fecha, hora_inicio, hora_fin, jugadores, filtro_hoyos, filtro_tipo, campos_seleccionados=None, lat_ref=None, lon_ref=None, radio_km=None):
     campos = cargar_campos(solo_activos=True)
 
     if campos_seleccionados is not None:
@@ -369,7 +397,29 @@ def buscar_teetimes(fecha, hora_inicio, hora_fin, jugadores, filtro_hoyos, filtr
             campo for campo in campos
             if campo["nombre"] in campos_seleccionados
         ]
-
+    if lat_ref is not None and lon_ref is not None and radio_km is not None:
+        campos_en_radio = []
+    
+        for campo in campos:
+            lat_campo = campo.get("lat")
+            lon_campo = campo.get("lon")
+    
+            if lat_campo is None or lon_campo is None:
+                continue
+    
+            distancia = calcular_distancia_km(
+                float(lat_ref),
+                float(lon_ref),
+                float(lat_campo),
+                float(lon_campo)
+            )
+    
+            if distancia <= radio_km:
+                campo["distancia_km"] = distancia
+                campos_en_radio.append(campo)
+    
+        campos = campos_en_radio
+    
     resultados = []
 
     for campo in campos:
@@ -567,6 +617,28 @@ fecha_default, hora_inicio_default, hora_fin_default = obtener_fecha_horas_defau
 with st.container(border=True):
     st.markdown("### 🔎 Criterios de búsqueda")
 
+    localidades = cargar_localidades()
+
+    lista_localidades = [
+        f"{l['localidad']} ({l['provincia']})"
+        for l in localidades
+    ]
+
+    localidad_seleccionada = st.selectbox(
+        "Localidad",
+        options=lista_localidades,
+        index=None,
+        placeholder="Selecciona una localidad"
+    )
+
+    radio_km = st.slider(
+        "Radio de búsqueda (km)",
+        min_value=10,
+        max_value=200,
+        value=50,
+        step=10
+    )
+
     col1, col2 = st.columns([1, 2])
 
     with col1:
@@ -661,10 +733,22 @@ with st.container(border=True):
         mostrar_responses_debug = st.checkbox("Mostrar responses recibidas", value=False)
 
 if st.button("Buscar"):
-
+        
     if modo_debug:
         st.session_state.debug_payloads = []
         st.session_state.debug_responses = []
+        
+    if localidad_seleccionada is None:
+        st.error("Debes seleccionar una localidad.")
+        st.stop()
+
+    localidad_obj = next(
+        l for l in localidades
+        if f"{l['localidad']} ({l['provincia']})" == localidad_seleccionada
+    )
+
+    lat_ref = localidad_obj["lat"]
+    lon_ref = localidad_obj["lon"]
 
     if jugadores is None or filtro_hoyos is None or filtro_tipo is None:
         st.error("Falta algún campo de búsqueda por seleccionar")
@@ -688,7 +772,10 @@ if st.button("Buscar"):
         jugadores,
         filtro_hoyos,
         filtro_tipo,
-        campos_seleccionados_debug
+        campos_seleccionados_debug,
+        lat_ref,
+        lon_ref,
+        radio_km
     )
 
     if not resultados:
