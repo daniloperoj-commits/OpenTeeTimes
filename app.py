@@ -522,6 +522,97 @@ def consultar_campo_golfmanager(campo, fecha, hora_inicio, hora_fin, jugadores, 
 
     return resultados
 
+def consultar_campo_golfmanager_v2(campo, fecha, hora_inicio, hora_fin, jugadores, filtro_hoyos, filtro_tipo):
+    resultados = []
+    endpoint = campo.get("url_api")
+
+    if not endpoint:
+        return []
+
+    recorridos_validos = [
+        recorrido
+        for recorrido in campo.get("Recorridos", [])
+        if recorrido_cumple_filtros(recorrido, filtro_hoyos, filtro_tipo)
+    ]
+
+    if not recorridos_validos:
+        return []
+
+    recorrido = recorridos_validos[0]
+
+    fecha_golfmanager = str(fecha).replace("/", "-")
+
+    params = {
+        "date": f"{fecha_golfmanager}T{hora_inicio}",
+        "area": 100,
+        "participants": jugadores
+    }
+
+    headers = {
+        "Accept": "application/json",
+        "User-Agent": "Mozilla/5.0",
+        "Referer": campo.get("url_reserva", "")
+    }
+
+    session = requests.Session()
+
+    try:
+        registrar_debug("payload", campo, recorrido, params)
+
+        r = session.get(endpoint, params=params, headers=headers, timeout=20)
+        data = r.json()
+
+        registrar_debug("response", campo, recorrido, data)
+
+    except Exception as e:
+        registrar_debug("response", campo, recorrido, {"error": str(e)})
+        return []
+
+    items = data.get("items", [])
+
+    if not isinstance(items, list):
+        registrar_debug("response", campo, recorrido, {
+            "error": "items no es una lista",
+            "items": items
+        })
+        return []
+
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+
+        hora = normalizar_hora(item.get("start"))
+        jugadores_disp = item.get("slots", 0)
+
+        if not hora:
+            continue
+
+        try:
+            jugadores_disp = int(jugadores_disp)
+        except (TypeError, ValueError):
+            jugadores_disp = 0
+
+        if jugadores_disp < jugadores:
+            continue
+
+        if hora < hora_inicio or hora > hora_fin:
+            continue
+
+        precio = item.get("price")
+        if precio is None:
+            continue
+
+        tarifas = [{
+            "nombre": (item.get("name") or item.get("categoryName") or "Tarifa").strip(),
+            "precio": precio
+        }]
+
+        resultados.append(
+            construir_resultado(campo, recorrido, hora, jugadores_disp, tarifas)
+        )
+
+    return resultados
+
 def buscar_teetimes(fecha, hora_inicio, hora_fin, jugadores, filtro_hoyos, filtro_tipo, campos_seleccionados=None, lat_ref=None, lon_ref=None, radio_km=None):
     campos = cargar_campos(solo_activos=True)
 
@@ -582,6 +673,13 @@ def buscar_teetimes(fecha, hora_inicio, hora_fin, jugadores, filtro_hoyos, filtr
         elif metodo == "golfmanager":
             resultados.extend(
                 consultar_campo_golfmanager(
+                    campo, fecha, hora_inicio, hora_fin, jugadores,
+                    filtro_hoyos, filtro_tipo
+                )
+            )
+        elif metodo == "golfmanager_v2":
+            resultados.extend(
+                consultar_campo_golfmanager_v2(
                     campo, fecha, hora_inicio, hora_fin, jugadores,
                     filtro_hoyos, filtro_tipo
                 )
