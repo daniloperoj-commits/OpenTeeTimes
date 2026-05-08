@@ -454,11 +454,30 @@ def consultar_campo_golfmanager(campo, fecha, hora_inicio, hora_fin, jugadores, 
         return []
 
     availability = data.get("availability", [])
+
+    if isinstance(availability, dict):
+        availability = list(availability.values())
+    
+    if not isinstance(availability, list):
+        registrar_debug("response", campo, recorrido, {
+            "error": "availability no es una lista",
+            "availability": availability
+        })
+        return []
+        
     if not availability:
         return []
 
     for slot in availability:
-        hora = normalizar_hora(slot.get("date") or slot.get("start"))
+        if not isinstance(slot, dict):
+            registrar_debug("response", campo, recorrido, {
+                "aviso": "Elemento availability ignorado porque no es un diccionario",
+                "valor": slot
+            })
+            continue
+
+    hora = normalizar_hora(slot.get("date") or slot.get("start"))
+        
         jugadores_disp = slot.get("slots", 0)
 
         if not hora:
