@@ -479,39 +479,39 @@ def consultar_campo_golfmanager(campo, fecha, hora_inicio, hora_fin, jugadores, 
     hora = normalizar_hora(slot.get("date") or slot.get("start"))
     jugadores_disp = slot.get("slots", 0)
 
-        if not hora:
+    if not hora:
+        continue
+
+    try:
+        jugadores_disp = int(jugadores_disp)
+    except (TypeError, ValueError):
+        jugadores_disp = 0
+
+    if jugadores_disp < jugadores:
+        continue
+
+    if hora < hora_inicio or hora > hora_fin:
+        continue
+
+    tarifas = []
+
+    for tipo in slot.get("types", []):
+        if tipo.get("onlyMembers", False):
             continue
 
-        try:
-            jugadores_disp = int(jugadores_disp)
-        except (TypeError, ValueError):
-            jugadores_disp = 0
-
-        if jugadores_disp < jugadores:
+        precio = tipo.get("price")
+        if precio is None:
             continue
 
-        if hora < hora_inicio or hora > hora_fin:
-            continue
+        tarifas.append({
+            "nombre": (tipo.get("name") or tipo.get("priceName") or "Tarifa").strip(),
+            "precio": precio
+        })
 
-        tarifas = []
-
-        for tipo in slot.get("types", []):
-            if tipo.get("onlyMembers", False):
-                continue
-
-            precio = tipo.get("price")
-            if precio is None:
-                continue
-
-            tarifas.append({
-                "nombre": (tipo.get("name") or tipo.get("priceName") or "Tarifa").strip(),
-                "precio": precio
-            })
-
-        if tarifas:
-            resultados.append(
-                construir_resultado(campo, recorrido, hora, jugadores_disp, tarifas)
-            )
+    if tarifas:
+        resultados.append(
+            construir_resultado(campo, recorrido, hora, jugadores_disp, tarifas)
+        )
 
     return resultados
 
