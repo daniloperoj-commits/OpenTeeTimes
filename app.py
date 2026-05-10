@@ -265,6 +265,17 @@ def consultar_campo_teeone_v1(campo, fecha, hora_inicio, hora_fin, jugadores, fi
         api = obtener_valor_hidden(soup, "HidAPIDominio")
         culture = obtener_valor_hidden(soup, "HidCultura")
 
+        if modo_debug and "herrer" in campo.get("nombre", "").lower():
+            st.write("🧪 DEBUG HERRERÍA - HIDDEN TEEONE V1", {
+                "url_reserva": campo.get("url_reserva"),
+                "token_encontrado": bool(token),
+                "id_inicio_encontrado": bool(id_inicio),
+                "api_encontrada": bool(api),
+                "culture_encontrada": bool(culture),
+                "api": api,
+                "culture": culture
+            })
+       
         if not token or not api:
             return []
     except Exception:
