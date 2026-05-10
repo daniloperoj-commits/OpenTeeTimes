@@ -2,6 +2,7 @@
   {
     "nombre": "El Encín Golf",
     "url_api": "https://api.teeone.golf/InternalBookingEngine/v1/Api/Disponibilidad/ObtenerDisponibilidadDia",
+    "url_origen_api": "https://open.teeone.golf/es/encin/disponibilidad",
     "activo": true,
     "metodo": "teeone_v1",
     "lat": 40.522604159896275,
@@ -31,6 +32,7 @@
   {
     "nombre": "El Robledal Golf",
     "url_api": "https://api.teeone.golf/InternalBookingEngine/v1/Api/Disponibilidad/ObtenerDisponibilidadDia",
+    "url_origen_api": "https://open.teeone.golf/es/robledal/disponibilidad",
     "activo": true,
     "metodo": "teeone_v1",
     "lat": 40.44528114841747,
@@ -53,6 +55,7 @@
   {
     "nombre": "Montealvar Golf",
     "url_api": "https://api.teeone.golf/InternalBookingEngine/v1/Api/Disponibilidad/ObtenerDisponibilidadDia",
+    "url_origen_api": "https://open.teeone.golf/es/montealvar/disponibilidad",
     "activo": true,
     "metodo": "teeone_v1",
     "lat": 40.58564588067582,
@@ -82,6 +85,7 @@
   {
     "nombre": "Club de Golf Retamares",
     "url_api": "https://api.teeone.golf/InternalBookingEngine/v1/Api/Disponibilidad/ObtenerDisponibilidadDia",
+    "url_origen_api": "https://open.teeone.golf/es/montealvar/disponibilidad",
     "activo": true,
     "metodo": "teeone_v1",
     "lat": 40.612376040747456,
@@ -90,7 +94,7 @@
     "id_vendedor_proveedor": 151,
     "telefono_reserva": "916 202 540",
     "email_reservas": "info@retamaresgolf.com",
-    "url_reserva": "https://open.teeone.golf/es/retamares/disponibilidad",
+    "url_reserva": "https://open.teeone.golf/es/montealvar/disponibilidad",
     "Recorridos": [
       {
         "nombre": "TEE 1 - 18 HOYOS",
@@ -111,6 +115,7 @@
   {
     "nombre": "Olivar de la Hinojosa",
     "url_api": "https://api.teeone.golf/InternalBookingEngine/v1/Api/Disponibilidad/ObtenerDisponibilidadDia",
+    "url_origen_api": "https://open.teeone.golf/es/olivar/disponibilidad",
     "activo": true,
     "metodo": "teeone_v1",
     "lat": 40.46872372682449,
@@ -147,6 +152,7 @@
   {
     "nombre": "Golf Negralejo",
     "url_api": "https://api.teeone.golf/InternalBookingEngine/v1/Api/Disponibilidad/ObtenerDisponibilidadDia",
+    "url_origen_api": "https://open.teeone.golf/es/negralejo/disponibilidad",
     "activo": true,
     "metodo": "teeone_v1",
     "lat": 40.40928629300759,
@@ -191,6 +197,7 @@
   {
     "nombre": "RCG Las Rozas de Madrid",
     "url_api": "https://api.teeone.golf/InternalBookingEngine/v1/Api/Disponibilidad/ObtenerDisponibilidadDia",
+    "url_origen_api": "https://open.teeone.golf/es/rcgolflasrozas/disponibilidad",
     "activo": true,
     "metodo": "teeone_v1",
     "lat": 40.54781304717753,
@@ -220,6 +227,7 @@
   {
     "nombre": "La Dehesa",
     "url_api": "https://api.teeone.golf/InternalBookingEngine/v1/Api/Disponibilidad/ObtenerDisponibilidadDia",
+    "url_origen_api": "https://open.teeone.golf/es/dehesa/disponibilidad",
     "activo": true,
     "metodo": "teeone_v1",
     "lat": 40.45015180054456,
@@ -249,6 +257,7 @@
   {
     "nombre": "La Herrería",
     "url_api": "https://api.teeone.golf/InternalBookingEngine/v1/Api/Disponibilidad/ObtenerDisponibilidadDia",
+    "url_origen_api": "https://open.teeone.golf/es/laherreria/disponibilidad",
     "activo": true,
     "metodo": "teeone_v1",
     "lat": 40.584669323455294,
@@ -257,7 +266,7 @@
     "id_vendedor_proveedor": 325,
     "telefono_reserva": "91 890 5111",
     "email_reservas": "----",
-    "url_reserva": "https://open.teeone.golf/es/golflaherreria/disponibilidad",
+    "url_reserva": "https://golfmadridlaherreria.com/",
     "Recorridos": [
       {
         "nombre": "TEE 1 - 18 HOYOS",
@@ -308,7 +317,7 @@
       }
     ]
   },
-  {
+    {
     "nombre": "Club de Golf Aranjuez",
     "url_api": "https://aranjuez.golfmanager.com/ebookings/init.api",
     "activo": true,
