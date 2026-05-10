@@ -257,7 +257,9 @@ def consultar_campo_teeone_v1(campo, fecha, hora_inicio, hora_fin, jugadores, fi
     session = requests.Session()
 
     try:
-        r = session.get(campo["url_reserva"], timeout=20)
+        url_origen = campo.get("url_origen_api", campo["url_reserva"])
+
+        r = session.get(url_origen, timeout=20)
         soup = BeautifulSoup(r.text, "html.parser")
 
         token = obtener_valor_hidden(soup, "HidTokenAPI")
