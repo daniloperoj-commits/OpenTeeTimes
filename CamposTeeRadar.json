@@ -290,6 +290,7 @@
     "campo_id": 10,
     "nombre": "Centro Nacional RFEG",
     "url_api": "https://api.teeone.golf/InternalCentroNacional/v1/Api/Disponibilidad/ObtenerDisponibilidadDia",
+    "url_origen_api": "https://centronacional.teeone.golf/Jugadores/Reservas/paso1",
     "activo": true,
     "metodo": "teeone_v2",
     "lat": 40.48547605196240,
