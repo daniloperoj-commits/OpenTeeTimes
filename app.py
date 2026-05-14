@@ -1569,7 +1569,7 @@ def obtener_fecha_horas_default():
 
     if ahora.hour >= 18:
         fecha_default = ahora.date() + timedelta(days=1)
-        hora_inicio_default = time(7, 0)
+        hora_inicio_default = time(8, 0)
     else:
         fecha_default = ahora.date()
         hora_inicio_default = redondear_hora_actual()
