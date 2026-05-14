@@ -508,7 +508,7 @@
   "nombre": "Base Aérea de Torrejón",
   "activo": true,
   "consultable": false,
-  "motivo_no_consultable": "Club militar.Requiere login",
+  "motivo_no_consultable": "Club militar. Requiere login",
   "web": "https://ejercitodelaireydelespacio.defensa.gob.es/EA/Golf_Torrejon/",
   "telefono": "--",
   "email": "--",
