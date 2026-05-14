@@ -410,8 +410,8 @@ def calcular_distancias_ruta_heigit(lat_ref, lon_ref, campos, radio_km, origen_c
                 resultado_txt = "En rango"
                 campos_en_rango_ruta.append(campo)
             else:
-                matrix_txt = f"KO caché - {distancia_ruta_km:.1f} km ruta".replace('.', ',')
-                resultado_txt = "Fuera de rango"
+                matrix_txt = f"NO caché - {distancia_ruta_km:.1f} km ruta".replace('.', ',')
+                resultado_txt = "Fuera de Orango"
                 campos_fuera_ruta.append(campo)
 
             registrar_debug_filtro(
