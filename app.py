@@ -525,7 +525,7 @@ def calcular_distancias_ruta_heigit(lat_ref, lon_ref, campos, radio_km, origen_c
             resultado_txt = "En rango"
             campos_en_rango_ruta.append(campo)
         else:
-            matrix_txt = f"KO ORS - {distancia_ruta_km:.1f} km ruta".replace('.', ',')
+            matrix_txt = f"NO caché - {distancia_ruta_km:.1f} km ruta".replace('.', ',')
             resultado_txt = "Fuera de rango"
             campos_fuera_ruta.append(campo)
 
@@ -1725,7 +1725,7 @@ if modo_debug:
 st.markdown("------")
 
 st.markdown(
-    "<p style='text-align:center; font-size:12px; color:gray;'>v2.0 - BETA(_)</p>",
+    "<p style='text-align:center; font-size:12px; color:gray;'>v2.0 - BETA</p>",
     unsafe_allow_html=True
 )
 
