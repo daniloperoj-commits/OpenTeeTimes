@@ -2024,7 +2024,7 @@ if modo_debug:
 st.markdown("------")
 
 st.markdown(
-    "<p style='text-align:center; font-size:12px; color:gray;'>v2.0 - BETA</p>",
+    "<p style='text-align:center; font-size:12px; color:gray;'>v2.0 - BETA_</p>",
     unsafe_allow_html=True
 )
 
